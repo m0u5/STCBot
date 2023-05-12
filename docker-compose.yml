@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+    bot:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: always
+        volumes:
+            -   ".:/STCbot"
+        depends_on:
+            -   db
+        networks:
+            - botNetw
+        environment:
+            API_TOKEN: 6179981662:AAEIWWPNE0cx4rt8FD8r2T5Tg5B7fzCnA1g
+    db:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+networks:
+    botNetw:
