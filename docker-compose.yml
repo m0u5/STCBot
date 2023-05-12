@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
     bot:
         build:
@@ -14,20 +15,19 @@ services:
         environment:
             API_TOKEN: 6179981662:AAEIWWPNE0cx4rt8FD8r2T5Tg5B7fzCnA1g
     db:
-
         image: mongo
+        container_name: mongodb
         restart: always
         environment:
-            MONGO_INITDB_DATABASE: stcDb
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: example
+            MONGO_INITDB_DATABASE: stcDb
         volumes:
-            - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-            - ./mongo-volume:/data/db
+            - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
         ports:
             -   "27017:27017"
-        command: mongod --auth
+        networks:
+            -   botNetw
+
 networks:
     botNetw:
-volumes:
-    mongo-volume:

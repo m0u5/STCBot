@@ -11,14 +11,14 @@ secret_phrase = 'kek'
 
 def get_all_users():
     result = ''
-    users=database.Users
+    users = database.Users
     for user in users.find():
-        result += f'user id: {user.id}, first visit: {user.firstVisit}, last visit: {user.lastVisit}\n'
+        result += f'user id: {user["id"]}, first visit: {user["firstVisit"]}, last visit: {user["lastVisit"]}\n'
     return result
 
 
 def update_last_visit(date, id):
-    database.Users.update_one({'id': id}, {'lastVisit': date})
+    database.Users.update_one({'id': id}, {'$set': {'lastVisit': date}})
 
 
 def add_user(user_id, date):
@@ -40,12 +40,10 @@ async def register(message: types.Message):
 
 @dp.message_handler()
 async def on_message_recieve(message: types.Message):
-    if message.text==secret_phrase:
-        all_users=get_all_users()
+    if message.text == secret_phrase:
+        all_users = get_all_users()
         await bot.send_message(message.chat.id, all_users)
     update_last_visit(message.date, message.from_user.id)
-
-
 
 
 if __name__ == '__main__':
